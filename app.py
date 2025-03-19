@@ -31,6 +31,142 @@ def preprocess_image(image):
     image = np.expand_dims(image, axis=0)  # Add batch dimension
     return image
 
+
+
+
+def create_map_animation():
+    st.markdown("""
+    <div class="map-container">
+        <div class="sun"></div>
+        <div class="cloud cloud1"></div>
+        <div class="cloud cloud2"></div>
+        <div class="moving-car car1"></div>
+        <div class="moving-car car2"></div>
+    </div>
+    <style>
+    .map-container {
+        position: relative;
+        height: 400px;
+        width: 100%;
+        background: #87CEEB;
+        border-radius: 10px;
+        overflow: hidden;
+        margin: 20px 0;
+        border: 2px solid #4682B4;
+    }
+    /* Sun */
+    .sun {
+        position: absolute;
+        top: 20px;
+        right: 30px;
+        width: 50px;
+        height: 50px;
+        background: #FFD700;
+        border-radius: 50%;
+        animation: sunGlow 2s ease-in-out infinite;
+    }
+    .sun::after {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border: 4px solid #FFD700;
+        border-radius: 50%;
+        animation: sunPulse 2s ease-out infinite;
+    }
+    /* Clouds */
+    .cloud {
+        position: absolute;
+        background: white;
+        border-radius: 20px;
+        animation: cloudFloat 20s linear infinite;
+    }
+    .cloud1 {
+        top: 80px;
+        left: -100px;
+        width: 80px;
+        height: 30px;
+        animation-delay: 2s;
+    }
+    .cloud1::before {
+        content: "";
+        position: absolute;
+        top: -15px;
+        left: 10px;
+        width: 40px;
+        height: 40px;
+        background: white;
+        border-radius: 50%;
+    }
+    .cloud2 {
+        top: 120px;
+        left: -100px;
+        width: 100px;
+        height: 35px;
+        animation-delay: 5s;
+    }
+    .cloud2::before {
+        content: "";
+        position: absolute;
+        top: -15px;
+        left: 15px;
+        width: 50px;
+        height: 50px;
+        background: white;
+        border-radius: 50%;
+    }
+    /* Cars */
+    .moving-car {
+        position: absolute;
+        bottom: 30px;
+        width: 40px;
+        height: 20px;
+        border-radius: 5px;
+        animation: drive 8s linear infinite;
+    }
+    .car1 {
+        left: -50px;
+        background: #FF4757;
+        animation-delay: 1s;
+    }
+    .car2 {
+        left: -50px;
+        background: #2ED573;
+        animation-delay: 3s;
+    }
+    .moving-car::after, .moving-car::before {
+        content: "";
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background: #333;
+        border-radius: 50%;
+        bottom: -5px;
+    }
+    .moving-car::after { left: 5px; }
+    .moving-car::before { right: 5px; }
+    /* Animations */
+    @keyframes sunGlow {
+        0%, 100% { box-shadow: 0 0 20px #FFD700; }
+        50% { box-shadow: 0 0 40px #FFD700; }
+    }
+    @keyframes sunPulse {
+        0% { transform: scale(1); opacity: 0.5; }
+        100% { transform: scale(1.5); opacity: 0; }
+    }
+    @keyframes cloudFloat {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(1200px); }
+    }
+    @keyframes drive {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(1200px); }
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+
+
 # Function to make predictions
 def predict(image):
     processed_image = preprocess_image(image)
@@ -119,6 +255,8 @@ with st.sidebar:
 
 # Main layout
 st.title("Land Cover Classification from Satellite Images ")
+create_map_animation()
+
 st.write("🖼️📸 Drag and drop one of the thumbnails below, select a random image from the dropdown, or upload your own image to classify its land cover type.🌍")
 
 # Define sample images
